@@ -1,0 +1,689 @@
+
+AppDelagate.h
+
+#import <UIKit/UIKit.h>
+
+@interface AppDelegate : UIResponder <UIApplicationDelegate>
+
+@property (strong, nonatomic) UIWindow *window;
+
+@end
+
+
+AppDelegate.m
+
+#import "AppDelegate.h"
+
+@implementation AppDelegate
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    // Override point for customization after application launch.
+    return YES;
+}
+							
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
+    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+@end
+
+
+HomePageViewController.h
+
+
+#import <UIKit/UIKit.h>
+#include "InfoViewController.h"
+
+
+@interface HomePageViewController : UIViewController
+- (IBAction)Exercises:(id)sender;
+- (IBAction)showInfo:(id)sender;
+
+@end
+
+
+HomePageViewController.m
+
+#import "HomePageViewController.h"
+
+@interface HomePageViewController ()
+
+@end
+
+@implementation HomePageViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	// Do any additional setup after loading the view.
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)Exercises:(id)sender {
+}
+
+- (IBAction)showInfo:(id)sender {
+    
+    InfoViewController * info = [[InfoViewController alloc]init];
+    info.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    
+}
+@end
+
+
+CollectionViewController.h
+
+#import <UIKit/UIKit.h>
+
+@interface SSCollectionViewController : UICollectionViewController
+
+@end
+
+
+CollectionViewController.m
+
+#import "SSCollectionViewController.h"
+#import "SSCollectionViewCell.h"
+#import "SSImageDetailViewController.h"
+
+
+@interface SSCollectionViewController ()
+
+@end
+
+@implementation SSCollectionViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	// Do any additional setup after loading the view.
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"PhotoDetailSegue"])
+    {
+        SSCollectionViewCell *cell = (SSCollectionViewCell *)sender;
+        NSIndexPath *indexPath = [self.collectionView indexPathForCell:cell];
+        
+        
+        int imageNumber = indexPath.row % 17;
+        
+        SSImageDetailViewController *idvc = (SSImageDetailViewController *) [segue destinationViewController];
+        idvc.img = [UIImage imageNamed:[NSString stringWithFormat:@"image%d.jpg", imageNumber]];
+    }
+}
+
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section;
+{
+    return 17;
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath;
+{
+    static NSString *identifier=@"Cell";
+    SSCollectionViewCell *cell = (SSCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
+    
+    
+    int imageNumber = indexPath.row % 17;
+    
+    cell.imageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"imageicon%d.jpg", imageNumber]];
+    
+    
+    return cell;
+}
+
+@end
+
+
+CollectionViewCell.h
+
+#import <UIKit/UIKit.h>
+
+@interface SSCollectionViewCell : UICollectionViewCell
+@property (weak) IBOutlet UIImageView *imageView;
+
+@end
+
+
+CollectionViewCell.m
+
+#import "SSCollectionViewCell.h"
+
+
+@interface SSCollectionViewCell  ()
+
+
+
+@end
+
+@implementation SSCollectionViewCell
+
+@synthesize imageView;
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        // Initialization code
+    }
+    return self;
+}
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect
+{
+    // Drawing code
+}
+*/
+
+@end
+
+ImageDetailViewController.h
+
+#import <UIKit/UIKit.h>
+
+@interface SSImageDetailViewController : UIViewController
+
+@property (weak) IBOutlet UIImageView *imageView;
+
+@property (strong) UIImage *img;
+
+@end
+
+ImageDetailViewController.m
+
+#import "SSImageDetailViewController.h"
+
+@interface SSImageDetailViewController ()
+
+@end
+
+@implementation SSImageDetailViewController
+
+@synthesize imageView,img;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.imageView.image = self.img;
+	// Do any additional setup after loading the view.
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+@end
+
+
+PickerViewController.h
+
+#import <UIKit/UIKit.h>
+
+@interface PickerViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource>
+@property (strong, nonatomic) IBOutlet UIImageView *characterImage;
+@property (strong, nonatomic) IBOutlet UIPickerView *characterPicker;
+
+@property (strong, nonatomic) NSArray * characters;
+
+@end
+
+
+PickerViewController.m
+
+import "PickerViewController.h"
+
+@interface PickerViewController ()
+
+@end
+
+@implementation PickerViewController
+
+@synthesize characterImage;
+@synthesize characterPicker;
+
+@synthesize characters = _characters;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	// Do any additional setup after loading the view.
+    
+    //Load up my array object
+    
+    _characters = [[NSArray alloc]initWithObjects:@"Fruits",@"Milk",@"Nuts",@"Vegetables", nil];
+    
+    
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark UIPickerView Methods
+
+- (NSInteger) numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+- (NSInteger) pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return _characters.count;
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    return [_characters objectAtIndex:row];
+}
+
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    //create UIimage objects
+    UIImage * fruitsImage = [UIImage imageNamed:@"fruits.jpg"];
+    UIImage * milkImage = [UIImage imageNamed:@"milk.jpg"];
+    UIImage * nutsImage = [UIImage imageNamed:@"nuts.jpg"];
+    UIImage  * vegeImage = [UIImage imageNamed:@"vege.jpg"];
+    
+    
+    switch (row) {
+        case 0:
+            characterImage.image = fruitsImage;
+            break;
+        case 1:
+            characterImage.image = milkImage;
+            break;
+        case 2:
+            characterImage.image = nutsImage;
+            break;
+        case 3:
+            characterImage.image = vegeImage;
+            break;
+        default:
+            characterImage.image = milkImage;
+            break;
+    }
+    
+    
+}
+
+
+@end
+
+TableViewController.h
+
+#import <UIKit/UIKit.h>
+
+@interface SecondViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UITableView *miTablaExercise;
+
+@end
+
+
+TableViewController.m
+
+#import "SecondViewController.h"
+#import "CustomCell2Cell.h"
+#import "Detail2ViewController.h"
+
+@interface SecondViewController (){
+    NSArray *TitlesArray;
+    NSArray *InfoArray;
+    NSArray *LevelArray;
+    NSArray *ImagesArray;
+    NSArray *StepsArray;
+    NSArray *VideoArray;
+}
+
+@end
+
+@implementation SecondViewController
+
+@synthesize miTablaExercise;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	// Do any additional setup after loading the view.
+    
+    [miTablaExercise setDataSource:self];
+    [miTablaExercise setDelegate:self];
+    
+    
+    
+    TitlesArray = [[NSArray alloc]initWithObjects:
+        @"Triceps Dips",
+        @"Triceps Bar Pushdowns",
+        @"ABS Crunches",
+        @"Back Dumbbell Rows",
+        @"Back Extensions",
+        @"Chest Press",
+        @"Shoulder Front Raise", nil];
+    
+    InfoArray = [[NSArray alloc]initWithObjects:
+    @"Home",
+    @"Gym",
+    @"Home",
+    @"Dumpels",
+    @"Home",
+    @"Barbell",
+    @"Dumpels", nil];
+    
+    
+    LevelArray = [[NSArray alloc]initWithObjects:
+
+    @"Amateur",
+    @"Intermediate",
+    @"Amateur",
+    @"Pro",
+    @"Intermediate",
+    @"Amateur",
+    @"Amateur", nil];
+    
+    ImagesArray = [[NSArray alloc]initWithObjects:
+
+    @"dips.jpg",
+    @"pushdown.jpg",
+    @"crunches.jpg",
+    @"dumbbellrows.jpg",
+    @"extension.jpg",
+    @"chestpress.jpg",
+    @"frontraise.jpg", nil];
+    
+    StepsArray = [[NSArray alloc]initWithObjects:
+    @"1.Sit on a bench or chair2.Begin with the hands next to or slightly under the hips.3.Lift up onto the hands and bring the hips forward.4.Bend the elbows (no lower than 90 degrees) and lower the hips down, keeping them very close to the chair. Keep the shoulders down",
+    @"1.Stand in front of a cable machine, holding onto the bar with the elbows bent to about 90 degrees.2.	Keeping the elbows stationary, push the bar down, contracting the triceps as you extend the arms.",
+    @"1.Lie face up on your mat and place your hands behind your head, lightly supporting it with your fingers.2.Bring the knees in to the chest and lift the shoulder blades off the floor without pulling on the neck.3.Rotate to the left, bringing the right elbow towards the left knee as you straighten the other leg.4.Switch sides, bringing the left elbow towards the right knee.",
+    @"1.Bend over at the waist until the torso is parallel to floor or at 45 degree angle, abs in and knees slightly bent.2.Hold medium-heavy weights straight down without locking the elbows.3.Bend the elbows and pull the weights up until the elbows are level with the torso in a rowing motion. Try to keep the shoulders relaxed and away from the ears.",
+    @"1.Lie face down on a mat and place the hands on the floor or behind the head (more advanced).2.Contract the abs and keep them contracted throughout the exercise.3.Squeeze the back to lift the chest a few inches off the floor.4.Lower and repeat for 1-3 sets of 10-16 reps total on each arm.",
+    @"1.Lie down on a bench, step or the floor. Begin with the barbell hovering just over the chest, elbows bent. Place the hands on the bar a bit wider than the shoulders.2.Contract the chest and push the weight straight up over the chest without locking the elbows at the top.3.Bend the elbows and lower the weight down until the elbows are just below the level of the chest.",
+    @"1.Hold light-medium weights with arms straight down, palms face the thighs.2.Slowly lift arms up to shoulder level keeping elbows slightly bent.3.Exhale and lower back down.4.This exercise can also be done with a light barbell or, if you're using heavier dumbbells, you can alternate arms.", nil];
+    VideoArray = [[NSArray alloc]initWithObjects:
+    @"http://youtu.be/nx9gVDCnT84?t=13s",
+    @"http://youtu.be/2-LAMcpzODU",
+    @"http://youtu.be/Xyd_fa5zoEU",
+    @"http://youtu.be/pYcpY20QaE8",
+    @"http://youtu.be/Bw9YuQTTc58",
+    @"http://youtu.be/bk9za1Yao2I",
+    @"http://youtu.be/-t7fuZ0KhDA", nil];
+    
+    
+    
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return [TitlesArray count];
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    CustomCell2Cell *cell = (CustomCell2Cell *)[tableView dequeueReusableCellWithIdentifier:@"CellPelicula"];
+    
+    if(!cell){
+        cell = [[CustomCell2Cell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CellPelicula"];
+        
+    }
+    
+   
+    cell.miTitle.text = [TitlesArray objectAtIndex:indexPath.row];
+    cell.miInfo.text = [InfoArray objectAtIndex:indexPath.row];
+    cell.miLevel.text = [LevelArray objectAtIndex:indexPath.row];
+    [[cell miImages]setImage:[UIImage imageNamed: [ImagesArray objectAtIndex:indexPath.row]]];
+    
+    return cell;
+}
+//pass data to the detail view
+
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([[segue identifier]isEqualToString:@"DetailView"]) {
+        
+        NSIndexPath *indexPath = [self.miTablaExercise indexPathForSelectedRow];
+        
+        NSDictionary *exercise = [[NSDictionary alloc]initWithObjectsAndKeys:
+        [TitlesArray objectAtIndex:indexPath.row],@"TITLE",
+        [InfoArray objectAtIndex:indexPath.row],@"INFO",
+        [LevelArray objectAtIndex:indexPath.row],@"LEVEL",
+        [ImagesArray objectAtIndex:indexPath.row],@"IMAGES",
+        [StepsArray objectAtIndex:indexPath.row],@"STEPS",
+        [VideoArray objectAtIndex:indexPath.row],@"VIDEO",nil];
+        
+        [[segue destinationViewController]setExePasarela:exercise];
+    
+}
+
+
+}
+
+@end
+
+TableViewCell.h
+
+#import <UIKit/UIKit.h>
+
+@interface CustomCell2Cell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIImageView *miImages;
+@property (weak, nonatomic) IBOutlet UILabel *miTitle;
+@property (weak, nonatomic) IBOutlet UILabel *miInfo;
+@property (weak, nonatomic) IBOutlet UILabel *miLevel;
+
+@end
+
+
+TableViewCell.m
+
+#import "CustomCell2Cell.h"
+
+@implementation CustomCell2Cell
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        // Initialization code
+    }
+    return self;
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end
+
+
+TableViewDetailController.h
+
+//
+//  Detail2ViewController.h
+//  SSCollectionViewTutorial
+//
+//  Created by Boyan Blagoev on 05/04/2013.
+//  Copyright (c) 2013 Bobby Design. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface Detail2ViewController : UIViewController
+
+@property (weak, nonatomic) IBOutlet UIImageView *imagesDetail;
+@property (weak, nonatomic) IBOutlet UILabel *titleDetail;
+@property (weak, nonatomic) IBOutlet UILabel *levelDetail;
+@property (weak, nonatomic) IBOutlet UILabel *stepsDetail;
+@property (weak, nonatomic) IBOutlet UILabel *infoDetail;
+
+@property (strong, nonatomic) IBOutlet NSDictionary *exePasarela;
+
+- (IBAction)viewTrailer:(id)sender;
+
+@end
+
+
+TableViewCellController.m
+
+//
+//  Detail2ViewController.m
+//  SSCollectionViewTutorial
+//
+//  Created by Boyan Blagoev on 05/04/2013.
+//  Copyright (c) 2013 Bobby Design. All rights reserved.
+//
+
+#import "Detail2ViewController.h"
+
+@interface Detail2ViewController ()
+
+@end
+
+@implementation Detail2ViewController
+@synthesize imagesDetail;
+@synthesize titleDetail;
+@synthesize infoDetail;
+@synthesize levelDetail;
+@synthesize stepsDetail;
+@synthesize exePasarela;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	// Do any additional setup after loading the view.
+    
+    [imagesDetail setImage:[UIImage imageNamed:[exePasarela objectForKey:@"IMAGES"]]];
+    [titleDetail setText:[exePasarela objectForKey:@"TITLE"]];
+    [infoDetail setText:[exePasarela objectForKey:@"INFO"]];
+    [levelDetail setText:[exePasarela objectForKey:@"LEVEL"]];
+    [stepsDetail setText:[exePasarela objectForKey:@"STEPS"]];
+    
+    
+    
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)viewTrailer:(id)sender {
+    
+    [[UIApplication sharedApplication]openURL:[NSURL URLWithString:[exePasarela objectForKey:@"VIDEO"]]];
+    
+}
+@end
+
+
+
